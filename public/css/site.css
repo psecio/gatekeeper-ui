@@ -1,0 +1,17 @@
+.active {
+	color: #3EB54D;
+	font-weight: bold;
+}
+.inactive {
+	color: #EB3B2F;
+	font-weight: bold;
+}
+.message-error {
+	color: #EB3B2F;
+	font-size: 11px;
+	padding: 2px;
+	display: none;
+}
+.loader {
+	display: none;
+}
