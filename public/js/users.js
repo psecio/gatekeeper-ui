@@ -26,8 +26,6 @@ $(function() {
 
 	$('#add-user-btn').click(function(e) {
 		e.preventDefault();
-		console.log('call popup');
-
 		$('#myModal').on('shown.bs.modal', function () {
   			$('#myInput').focus();
 		});
