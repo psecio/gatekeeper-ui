@@ -6,9 +6,8 @@
 
 <div class="alert" id="user-alert" style="display:none"></div>
 
-<!-- Button trigger modal -->
 <button type="button" class="btn btn-success" data-toggle="modal" data-target="#add-user-modal">
-  + Add User
+  + Add user
 </button>
 
 <table class="table table-striped">
@@ -32,7 +31,7 @@
 			<td class="created">{{ user.created }}</td>
 			<td>
 				<a href="/users/edit/{{ user.username }}"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a>
-				<a href="/users/status/{{ user.username}}" class="toggle-status"><span class="glyphicon glyphicon-off" aria-hidden="true"></span></a>
+				<a href="/users/status/{{ user.username }}" class="toggle-status"><span class="glyphicon glyphicon-off" aria-hidden="true"></span></a>
 				<a href="/users/delete/{{ user.username }}" class="user-delete"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
 			</td>
 		</tr>
@@ -49,7 +48,7 @@
         <h4 class="modal-title" id="myModalLabel">Add New User</h4>
       </div>
       <div class="modal-body">
-      	<div id="message" class="alert"></div>
+      	<div id="message" style="display:none" class="alert"></div>
 
         <form class="form-horizontal" id="form-create-user">
         	<div class="form-group" id="add-user-group-username">

@@ -10,7 +10,9 @@
 		{title: 'Created', key: 'created'}
 	],
 	primaryKey: 'name',
-	title: 'Current Permissions'
+	title: 'Current Permissions',
+	showAdd: true,
+	addType: 'permission'
 } %}
 {% include 'partial/_table.php' with vars %}
 
