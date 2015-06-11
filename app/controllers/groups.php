@@ -11,4 +11,13 @@ $app->group('/groups', function() use ($app, $view) {
 
 		$view->render('groups/index.php', $data);
 	});
+
+	$app->get('/view/:group', function($group) use ($app, $view) {
+		$group = g::findGroupByName($group);
+		$data = array(
+			'group' => $group->toArray(),
+			'permissions' => $group->permissions->toArray(true)
+		);
+		$view->render('groups/view.php', $data);
+	});
 });

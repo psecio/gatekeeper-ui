@@ -45,7 +45,9 @@ $app->group('/users', function() use ($app, $view) {
 		try {
 			$user = g::findUserByUsername($username);
 			$data = array(
-				'user' => $user->toArray()
+				'user' => $user->toArray(),
+				'groups' => $user->groups->toArray(true),
+				'permissions' => $user->permissions->toArray(true)
 			);
 			echo $view->render('users/view.php', $data);
 
