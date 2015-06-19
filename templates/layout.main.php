@@ -65,5 +65,6 @@
     <script src="/js/bootstrap.min.js"></script>
     <script src="/js/site.js"></script>
     <script src="/js/users.js"></script>
+    <script src="/js/groups.js"></script>
   </body>
 </html>
