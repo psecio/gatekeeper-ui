@@ -36,6 +36,10 @@
 		<h3>Groups</h3>
 		<table class="table table-striped">
 		{% for group in groups %}
+		<tr>
+			<td><a href="/group/view/{{ group.name }}">{{ group.name }}</a></td>
+			<td>{{ group.description }}</td>
+		</tr>
 		{% endfor %}
 		</table>
 	</div>
@@ -43,6 +47,10 @@
 		<h3>Permissions</h3>
 		<table class="table table-striped">
 		{% for permission in permissions %}
+		<tr>
+			<td><a href="/permissions/view/{{ permission.name }}">{{ permission.name }}</a></td>
+			<td>{{ permission.description }}</td>
+		</tr>
 		{% endfor %}
 		</table>
 	</div>
