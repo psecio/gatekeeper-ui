@@ -15,3 +15,11 @@
 .loader {
 	display: none;
 }
+
+table.user-table td.username {
+	font-size: 11px;
+}
+table.user-table td.username a.name {
+	font-size: 18px;
+	font-weight: bold;
+}

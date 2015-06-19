@@ -7,20 +7,25 @@ $(function() {
 		);
 	});
 	$(document).on('click', '.user-delete', function(e) {
-		makeRequest(e,
-			function(data) {
-				$('#user-'+data.username).remove();
-				$('#user-alert').addClass('alert-success')
-					.html('User deleted successfully')
-					.css('display', 'block');
-			},
-			function(xhr, options, thrownError) {
-				var response = $.parseJSON(xhr.responseText);
-				$('#user-alert').addClass('alert-danger')
-					.html(response.message)
-					.css('display', 'block');
-			}
-		);
+		if (window.confirm("Do you want to delete this user?")) {
+			makeRequest(e,
+				function(data) {
+					$('#user-'+data.username).remove();
+					$('#user-alert').addClass('alert-success')
+						.html('User deleted successfully')
+						.css('display', 'block');
+				},
+				function(xhr, options, thrownError) {
+					var response = $.parseJSON(xhr.responseText);
+					$('#user-alert').addClass('alert-danger')
+						.html(response.message)
+						.css('display', 'block');
+				}
+			);
+			return true;
+		} else {
+			return false;
+		}
 	});
 
 
