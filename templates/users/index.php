@@ -10,25 +10,25 @@
   + Add user
 </button>
 
-<table class="table table-striped">
+<table class="table table-striped user-table">
 	<thead>
-		<th>Username</th>
-		<th>First Name</th>
-		<th>Last Nname</th>
-		<th>Email</th>
+		<th>User</th>
 		<th>Status</th>
 		<th>Created</th>
+    <th>Last Login</th>
 		<th>&nbsp;</th>
 	</thead>
 	<tbody>
 		{% for user in users %}
 		<tr id="user-{{ user.username }}">
-			<td class="username"><a href="/users/view/{{ user.username }}">{{ user.username }}</a></td>
-			<td class="first-name">{{ user.firstName }}</td>
-			<td class="last-name">{{ user.lastName }}</td>
-			<td class="email">{{ user.email }}</td>
+			<td class="username">
+        <a href="/users/view/{{ user.username }}" class="name">{{ user.firstName }} {{ user.lastName }}</a><br/>
+        <a href="/users/view/{{ user.username }}">{{ user.username }}</a><br/>
+        <span class="glyphicon glyphicon-envelope"></span>&nbsp;<a href="mailto:{{ user.email }}">{{ user.email }}</a>
+      </td>
 			<td class="status {{ user.status }}">{{ user.status }}</td>
 			<td class="created">{{ user.created }}</td>
+      <td>{% if user.lastLogin %}{{ user.lastLogin }}{% else %}Never logged in.{% endif %}</td>
 			<td>
 				<a href="/users/edit/{{ user.username }}"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a>
 				<a href="/users/status/{{ user.username }}" class="toggle-status"><span class="glyphicon glyphicon-off" aria-hidden="true"></span></a>
