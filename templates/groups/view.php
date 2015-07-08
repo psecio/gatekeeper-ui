@@ -31,19 +31,7 @@
 			<th>Description</th>
 			<th>&nbsp;</th>
 		</thead>
-		<tbody>
-		{% for permission in permissions %}
-		<tr id="permission-row-{{ permission.id }}">
-			<td><a href="/permissions/view/{{ permission.name }}">{{ permission.name }}</a></td>
-			<td>{{ permission.description }}</td>
-			<td>
-				<a href="#" class="delete-permission" id="permission-{{ permission.id }}">
-					<img src="/img/x.jpeg" width="20" border="0">
-				</a>
-			</td>
-		</tr>
-		{% endfor %}
-		</tbody>
+		<tbody id="perm-list"></tbody>
 	</table>
 </div>
 <div class="col-md-6">
@@ -72,6 +60,16 @@
 		</tr>
 		{% endfor %}
 		</tbody>
+	</table>
+	<br/>
+	<table class="table table-striped">
+		<thead>
+			<th>Username</th>
+			<th>Name</th>
+			<th>Email</th>
+			<th>&nbsp;</th>
+		</thead>
+		<tbody id="user-list"></tbody>
 	</table>
 </div>
 
@@ -116,5 +114,33 @@
 		</div>
 	</div>
 </div>
+
+<script id="permission-table-rows" type="text/x-handlebars-template">
+{% raw %}
+{{#each permissions}}
+<tr>
+	<td><a href="/permissions/view/{{name}}">{{name}}</a></td>
+	<td>{{description}}</td>
+	<td><a href="#" class="delete-permission" id="permission-{{id}}">
+		<img src="/img/x.jpeg" width="20" border="0"></a></td>
+	</tr>
+{{/each}}
+{% endraw %}
+</script>
+
+<script id="user-table-rows" type="text/x-handlebars-template">
+{% raw %}
+{{#each users}}
+<tr>
+	<td><a href="/user/view/{{username}}">{{username}}</a></td>
+	<td>{{ firstName }} {{ lastName }}</td>
+	<td>{{email}}</td>
+	<td><a href="#" class="delete-permission" id="permission-{{id}}">
+		<img src="/img/x.jpeg" width="20" border="0"></a></td>
+	</tr>
+{{/each}}
+{% endraw %}
+</script>
+
 
 {% endblock %}

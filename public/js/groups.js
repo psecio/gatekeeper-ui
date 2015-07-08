@@ -1,5 +1,53 @@
 $(function() {
 
+	// pc = new PermissionCollection();
+	// pc.fetch();
+
+	var PermissionListView = Backbone.View.extend({
+		el: $('#perm-list'),
+		initialize: function(data) {
+			if (typeof this.collection == 'undefined') {
+				this.collection = new PermissionCollection;
+			}
+			this.listenTo(
+				this.collection, 'reset add change remove', this.render, this
+			);
+			this.collection.fetch();
+		},
+		render: function() {
+			var template = Handlebars.compile($('#permission-table-rows').html());
+			var output = template({
+				permissions: this.collection.toJSON()
+			});
+			this.$el.html(output);
+		}
+	});
+	var UserListView = Backbone.View.extend({
+		el: $('#user-list'),
+		initialize: function(data) {
+			if (typeof this.collection == 'undefined') {
+				this.collection = new UserCollection;
+			}
+			this.listenTo(
+				this.collection, 'reset add change remove', this.render, this
+			);
+			this.collection.fetch();
+		},
+		render: function() {
+			var template = Handlebars.compile($('#user-table-rows').html());
+			var output = template({
+				users: this.collection.toJSON()
+			});
+			this.$el.html(output);
+		}
+	});
+
+	var permissions = new PermissionCollection({ type: 'group', groupId: 1 });
+	var permissionView = new PermissionListView({ collection: permissions });
+
+	var c1 = new UserCollection({ groupId: 1 });
+	var ulv = new UserListView({ collection: c1 });
+
 	function Client(server) {
 		this.server = server;
 
@@ -70,6 +118,13 @@ $(function() {
 	var client = new Client();
 	var g = new Group(client);
 	var u = new User(client);
+
+	$('#delete-permission-btn').on('click', function(e) {
+		e.preventDefault();
+		var item = v1.at(0);
+		item.destroy({ groupId: 1 });
+		v1.remove(v1.at(0));
+	});
 
 	$('#add-group-save').on('click', function(e) {
 		e.preventDefault();
@@ -160,47 +215,31 @@ $(function() {
 		$.each($('#permission-list option:selected'), function(k, perm) {
 			permIds.push($(perm).val());
 		});
-		var data = { ids: permIds, name: $('#groupName').val() };
-		g.savePermissions(data, function(data) {
-			$.each(permIds, function(key, value) {
-				g.findByName(value, function(data) {
-					// check to see if the row already exists
-					if ($('#permission-row-'+data.id).length) {
-						return true;
-					}
-					var row = $('<tr/>');
-					row.attr('id', 'permission-row-'+data.id);
-					row.append('<td><a href="/permissions/view/'+data.name+'">'+data.name+'</a></td>'
-						+'<td>'+data.description+'</td>'
-						+'<td><a href="#" class="delete-permission" id="permission-'+data.id+'">'
-						+'<img src="/img/x.jpeg" width="20" border="0"></a></td>');
-					$('#permission-table').append(row);
+
+		$.each(permIds, function(k, id) {
+			// see if the collection has the item
+			if (permissions.get(id) == undefined) {
+				var perm = new Permission({ id: id });
+				perm.fetch().done(function() {
+					permissions.create(perm);
 				});
-			});
-			$('#add-permission-modal').modal('hide');
+			}
 		});
+
+		$('#add-permission-modal').modal('hide');
 	});
 
 	$('#permission-table').on('click', '.delete-permission', function(e) {
 		e.preventDefault();
 		if (confirm('Are you sure you want to unlink this permission?')) {
 			var permId = $(e.currentTarget).attr('id').split('-')[1];
-			$.ajax({
-				url: '/groups/permissions',
-				dataType: 'json',
-				type: 'DELETE',
-				data: {
-					groupName: $('#groupName').val(),
-					permissionId: permId
-				},
-				success: function(data) {
-					$('#permission-row-'+permId).remove();
-				}
-			});
+
+			var item = permissions.get(permId);
+			item.destroy({ groupId: 1 });
+			permissions.remove(item);
 			return true;
-		} else {
-			return false;
 		}
+		return false;
 	});
 
 	$('#user-table').on('click', '.delete-user', function(e) {

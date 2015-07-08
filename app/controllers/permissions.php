@@ -1,6 +1,19 @@
 <?php
 use \Psecio\Gatekeeper\Gatekeeper as g;
 
+$app->group('/permission', function() use ($app, $view) {
+
+	$app->get('/', function() use ($app, $view) {
+		$permissions = g::findPermissions();
+		$view->render('json.php', $permissions->toArray(true));
+	});
+	$app->get('/:id', function($id) use ($app, $view) {
+		$perm = (is_numeric($id)) ? g::findPermissionById($id) : g::findPermissionByName($id);
+		$view->render('json.php', $perm->toArray());
+	});
+});
+
+// Pages
 $app->group('/permissions', function() use ($app, $view) {
 
 	$app->get('/', function() use ($app, $view) {

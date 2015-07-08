@@ -1,6 +1,36 @@
 <?php
 use \Psecio\Gatekeeper\Gatekeeper as g;
 
+$app->group('/group', function() use ($app, $view) {
+	$app->get('/', function() use ($app, $view) {
+		$groups = g::findGroups();
+		$view->render('json.php', $groups->toArray(true));
+	});
+	$app->get('/:id', function($id) use ($app, $view) {
+		$group = (is_numeric($id)) ? g::findGroupById($id) : g::findGroupByName($id);
+		$view->render('json.php', $group->toArray());
+	});
+	$app->get('/:id/permission', function($groupId) use ($app, $view) {
+		$permissions = g::findGroupById($groupId)->permissions;
+		$view->render('json.php', $permissions->toArray(true));
+	});
+	$app->put('/:id/permission/:permId', function($groupId, $permId) use ($app, $view) {
+		$group = g::findGroupById($groupId);
+		if ($group->hasPermission($permId) === false) {
+			$group->addPermission($permId);
+		}
+	});
+	$app->delete('/:id/permission/:permId', function($groupId, $permId) use ($app, $view) {
+		$group = g::findGroupById($groupId);
+		$group->removePermission($permId);
+	});
+	$app->get('/:id/user', function($groupId) use ($app, $view) {
+		$users = g::findGroupById($groupId)->users;
+		$view->render('json.php', $users->toArray(true));
+	});
+});
+
+// Pages
 $app->group('/groups', function() use ($app, $view) {
 
 	$app->get('/', function() use ($app, $view) {
