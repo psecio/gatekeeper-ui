@@ -2,29 +2,25 @@
 
 {% block content %}
 
-{% set vars = {
-	data: groups,
-	properties: [
-		{title: 'Name', key:'name', link: true},
-		{title: 'Description', key: 'description'},
-		{title: 'Created', key: 'created'}
-	],
-	primaryKey: 'name',
-	title: 'Current Groups',
-	showAdd: true,
-	addType: 'group',
-	link: '/groups/view'
-} %}
-{% include 'partial/_table.php' with vars %}
+<h3>Current Groups</h3>
 
-<table class="table table-striped">
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-success" data-toggle="modal" data-target="#add-group-modal">
+  + Add group
+</button>
+
+<table class="table table-striped" id="groups-table">
   <thead>
+    <th>Name</th>
+    <th>Description</th>
+    <th>Created</th>
+    <th>&nbsp;</th>
   </thead>
   <tbody id="groups-list">
   </tbody>
 </table>
 
-<!-- Add User Modal -->
+<!-- Add Group Modal -->
 <div class="modal fade" id="add-group-modal" tabindex="-1" role="dialog" aria-labelledby="addGroupModal" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -39,13 +35,13 @@
         	<div class="form-group">
     			<label for="name" class="col-sm-3">Name:</label>
     			<div class="col-sm-8">
-    				<input type="text" class="form-control" name="name" id="name" placeholder="Enter group name">
+    				<input type="text" class="form-control" name="group-name" id="group-name" placeholder="Enter group name">
     			</div>
   			</div>
         	<div class="form-group">
     			<label for="description" class="col-sm-3">Description:</label>
     			<div class="col-sm-8">
-    				<input type="email" class="form-control" name="description" id="email" placeholder="Enter description">
+    				<input type="email" class="form-control" name="group-description" id="group-description" placeholder="Enter description">
     			</div>
   			</div>
 		</form>
@@ -63,10 +59,20 @@
 {{#each groups}}
 <tr>
   <td><a href="/groups/view/{{name}}">{{name}}</a></td>
+  <td>{{ description }}</td>
+  <td>{{ created }}</td>
+  <td>
+      <a href="/groups/edit/{{ name }}"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a>
+      <a href="/groups/delete/{{ name }}" class="group-delete" id="group-{{ id }}"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
+    </td>
   </tr>
 {{/each}}
 {% endraw %}
 </script>
 
 
+{% endblock %}
+
+{% block scripts %}
+<script src="/js/groups/index.js"></script>
 {% endblock %}

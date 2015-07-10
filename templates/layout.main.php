@@ -69,6 +69,6 @@
     <script src="/js/site.js"></script>
     <script src="/js/init.js"></script>
     <script src="/js/users.js"></script>
-    <script src="/js/groups.js"></script>
+    {% block scripts %}{% endblock %}
   </body>
 </html>

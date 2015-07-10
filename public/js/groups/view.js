@@ -42,26 +42,6 @@ $(function() {
 			this.$el.html(output);
 		}
 	});
-	var GroupsListView = Backbone.View.extend({
-		el: $('#groups-list'),
-		initialize: function(data) {
-			if (typeof this.collection == 'undefined') {
-				this.collection = new UserCollection;
-			}
-			this.listenTo(
-				this.collection, 'reset add change remove', this.render, this
-			);
-			this.collection.fetch();
-		},
-		render: function() {
-			var template = Handlebars.compile($('#group-table-rows').html());
-			var output = template({
-				users: this.collection.toJSON()
-			});
-
-			this.$el.html(output);
-		}
-	});
 
 	var permissions = new PermissionCollection({ type: 'group', groupId: 1 });
 	var permissionView = new PermissionListView({ collection: permissions });
@@ -69,35 +49,12 @@ $(function() {
 	var c1 = new UserCollection({ type: 'group', groupId: 1 });
 	var ulv = new UserListView({ collection: c1 });
 
-	var groups = new GroupCollection();
-	var groupsView = new GroupsListView({ collection: groups });
 
 	$('#delete-permission-btn').on('click', function(e) {
 		e.preventDefault();
 		var item = v1.at(0);
 		item.destroy({ groupId: 1 });
 		v1.remove(v1.at(0));
-	});
-
-	$('#add-group-save').on('click', function(e) {
-		e.preventDefault();
-		$.ajax({
-			url: '/groups/add',
-			dataType: "json",
-			type: "POST",
-			data: $('#form-create-group').serialize(),
-			success: function(data) {
-				$('#add-group-modal').modal('hide');
-				$('#add-group-modal #message').css('display', 'none');
-			},
-			error: function(xhr, options, thrownError) {
-				var response = $.parseJSON(xhr.responseText);
-				$('#add-group-modal #message')
-					.css('display', 'block')
-					.addClass('alert-danger')
-					.html(response.message);
-			}
-		});
 	});
 
 	$('#add-permission-modal').on('show.bs.modal', function(e) {

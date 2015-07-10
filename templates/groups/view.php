@@ -119,5 +119,8 @@
 {% endraw %}
 </script>
 
+{% endblock %}
 
+{% block scripts %}
+<script src="/js/groups/view.js"></script>
 {% endblock %}

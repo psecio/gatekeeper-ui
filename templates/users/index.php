@@ -11,32 +11,15 @@
 </button>
 
 <table class="table table-striped user-table">
-	<thead>
-		<th>User</th>
-		<th>Status</th>
-		<th>Created</th>
+  <thead>
+    <th>User</th>
+    <th>Status</th>
+    <th>Created</th>
     <th>Last Login</th>
-		<th>&nbsp;</th>
-	</thead>
-	<tbody>
-		{% for user in users %}
-		<tr id="user-{{ user.username }}">
-			<td class="username">
-        <a href="/users/view/{{ user.username }}" class="name">{{ user.firstName }} {{ user.lastName }}</a><br/>
-        <a href="/users/view/{{ user.username }}">{{ user.username }}</a><br/>
-        <span class="glyphicon glyphicon-envelope"></span>&nbsp;<a href="mailto:{{ user.email }}">{{ user.email }}</a>
-      </td>
-			<td class="status {{ user.status }}">{{ user.status }}</td>
-			<td class="created">{{ user.created }}</td>
-      <td>{% if user.lastLogin %}{{ user.lastLogin }}{% else %}Never logged in.{% endif %}</td>
-			<td>
-				<a href="/users/edit/{{ user.username }}"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a>
-				<a href="/users/status/{{ user.username }}" class="toggle-status"><span class="glyphicon glyphicon-off" aria-hidden="true"></span></a>
-				<a href="/users/delete/{{ user.username }}" class="user-delete"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
-			</td>
-		</tr>
-		{% endfor %}
-	</tbody>
+    <th>&nbsp;</th>
+  </thead>
+  <tbody id="user-list">
+  </tbody>
 </table>
 
 <!-- Add User Modal -->
@@ -101,4 +84,30 @@
   </div>
 </div>
 
+<script id="user-table-rows" type="text/x-handlebars-template">
+{% raw %}
+{{#each users}}
+<tr id="user-{{ username }}">
+  <td class="username">
+    <a href="/users/view/{{ username }}" class="name">{{ firstName }} {{ lastName }}</a><br/>
+    <a href="/users/view/{{ username }}">{{ username }}</a><br/>
+    <span class="glyphicon glyphicon-envelope"></span>&nbsp;<a href="mailto:{{ email }}">{{ email }}</a>
+  </td>
+  <td class="status {{ status }}">{{ status }}</td>
+  <td class="created">{{ created }}</td>
+  <td>{{#if lastLogin }}{{ lastLogin }}{{else}}Never logged in.{{/if}}</td>
+  <td>
+    <a href="/users/edit/{{ username }}"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a>
+    <a href="/users/status/{{ username }}" class="toggle-status"><span class="glyphicon glyphicon-off" aria-hidden="true"></span></a>
+    <a href="/users/delete/{{ username }}" class="user-delete"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
+  </td>
+</tr>
+{{/each}}
+{% endraw %}
+</script>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="/js/users/index.js"></script>
 {% endblock %}

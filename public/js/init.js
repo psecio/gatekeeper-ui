@@ -4,7 +4,7 @@
 		defaults: {
 			name: '',
 			description: '',
-			id: 0,
+			// id: 0,
 			created: '',
 			updated: ''
 		}

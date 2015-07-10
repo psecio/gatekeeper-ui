@@ -6,9 +6,21 @@ $app->group('/group', function() use ($app, $view) {
 		$groups = g::findGroups();
 		$view->render('json.php', $groups->toArray(true));
 	});
+	$app->post('/', function() use ($app, $view) {
+		$data = json_decode($app->request->getBody(true));
+
+		g::createGroup([
+			'name' => $data->name,
+			'description' => $data->description
+		]);
+	});
 	$app->get('/:id', function($id) use ($app, $view) {
 		$group = (is_numeric($id)) ? g::findGroupById($id) : g::findGroupByName($id);
 		$view->render('json.php', $group->toArray());
+	});
+	$app->delete('/:id', function($id) use ($app, $view) {
+		$group = g::findGroupById($id);
+		g::deleteGroup($group);
 	});
 	$app->get('/:id/permission', function($groupId) use ($app, $view) {
 		$permissions = g::findGroupById($groupId)->permissions;
@@ -61,6 +73,30 @@ $app->group('/groups', function() use ($app, $view) {
 			'users' => $group->users->toArray(true)
 		);
 		$view->render('groups/view.php', $data);
+	});
+
+	$app->get('/edit/:group', function($group) use ($app, $view) {
+		$group = g::findGroupByName($group);
+		$data = [
+			'group' => $group->toArray()
+		];
+		$view->render('groups/edit.php', $data);
+	});
+	$app->post('/edit/:group', function($group) use ($app, $view) {
+		$post = $app->request->post();
+		$data = ['success' => true];
+
+		$group = g::findGroupByName($group);
+		$group->name = $post['name'];
+		$group->description = $post['description'];
+
+		$ds = g::getDatasource();
+		if ($ds->save($group) === false) {
+			throw new \Exception('Error saving user.');
+		}
+
+		$data['group'] = $group->toArray();
+		$view->render('groups/edit.php', $data);
 	});
 
 	$app->post('/add', function() use ($app, $view) {
