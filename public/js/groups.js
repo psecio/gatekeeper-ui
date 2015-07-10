@@ -38,6 +38,27 @@ $(function() {
 			var output = template({
 				users: this.collection.toJSON()
 			});
+
+			this.$el.html(output);
+		}
+	});
+	var GroupsListView = Backbone.View.extend({
+		el: $('#groups-list'),
+		initialize: function(data) {
+			if (typeof this.collection == 'undefined') {
+				this.collection = new UserCollection;
+			}
+			this.listenTo(
+				this.collection, 'reset add change remove', this.render, this
+			);
+			this.collection.fetch();
+		},
+		render: function() {
+			var template = Handlebars.compile($('#group-table-rows').html());
+			var output = template({
+				users: this.collection.toJSON()
+			});
+
 			this.$el.html(output);
 		}
 	});
@@ -45,79 +66,11 @@ $(function() {
 	var permissions = new PermissionCollection({ type: 'group', groupId: 1 });
 	var permissionView = new PermissionListView({ collection: permissions });
 
-	var c1 = new UserCollection({ groupId: 1 });
+	var c1 = new UserCollection({ type: 'group', groupId: 1 });
 	var ulv = new UserListView({ collection: c1 });
 
-	function Client(server) {
-		this.server = server;
-
-		this.get = function(url, success, error) {
-			if (typeof success == 'undefined') {
-				success = function() { }
-			}
-			if (typeof error == 'undefined') {
-				error = function() {}
-			}
-			$.ajax({
-				url: url,
-				type: 'GET',
-				dataType: 'json',
-				success: success,
-				error: error
-			});
-		}
-		this.post = function(url, data, success, error) {
-			if (typeof success == 'undefined') {
-				success = function() { }
-			}
-			if (typeof error == 'undefined') {
-				error = function() {}
-			}
-			$.ajax({
-				url: url,
-				type: 'POST',
-				dataType: 'json',
-				data: data,
-				success: success,
-				error: error
-			});
-		}
-	};
-
-	function Group(client) {
-		this.client = client;
-
-		this.findByName = function(name, success, error) {
-			this.client.get('/permissions/view/'+name, success, error);
-		}
-		this.savePermissions = function(data, success) {
-			this.client.post(
-				'/groups/permissions', data, success
-			);
-		}
-		this.getPermissions = function(name, success, error) {
-			this.client.get(
-				'/groups/permissions/'+name, success, error
-			);
-		}
-		this.saveUsers = function(data, success) {
-			this.client.post(
-				'/groups/users', data, success
-			);
-		}
-	};
-
-	function User(client) {
-		this.client = client;
-
-		this.getAll = function(success, error) {
-			this.client.get('/users', success, error);
-		}
-	}
-
-	var client = new Client();
-	var g = new Group(client);
-	var u = new User(client);
+	var groups = new GroupCollection();
+	var groupsView = new GroupsListView({ collection: groups });
 
 	$('#delete-permission-btn').on('click', function(e) {
 		e.preventDefault();
@@ -151,64 +104,61 @@ $(function() {
 		// Get the permission list and populate the multi-select
 		var list = $('#permission-list');
 
-		$.ajax({
-			url: '/permissions',
-			dataType: 'json',
-			type: 'GET',
-			success: function(permData) {
-				// Clear the list and repopulate
-				document.getElementById("permission-list").options.length = 0;
-				var permSelect = $('#permission-list');
-				var groupName = $('#groupName').val();
+		var fullPermList = new PermissionCollection();
+		fullPermList.fetch().done(function() {
+			_.each(fullPermList.models, function(perm, index) {
+				var option = $('<option/>').attr('value', perm.get('id'))
+					.text(perm.get('description')+' ('+perm.get('name')+')');
 
-				g.getPermissions(groupName, function(data) {
-					var idList = [];
-					$.each (data.permissions, function(k, perm) {
-						idList.push(perm.id);
-					});
+				var id = perm.get('id');
+				if (permissions.get(id) !== undefined) {
+					option.attr('selected', 'selected');
+				}
 
-					$.each (permData.permissions, function(k, perm) {
-						var option = $('<option/>').attr('value', perm.id)
-							.text(perm.description+' ('+perm.name+')');
-
-						if ($.inArray(perm.id, idList) >= 0) {
-							option.attr('selected', 'selected');
-						}
-
-						permSelect.append(option);
-					});
-				});
-			}
+				list.append(option);
+			});
 		});
 	});
 
 	$('#add-user-modal').on('show.bs.modal', function(e) {
-		var list = $('#user-list');
+		var list = $('#user-select-list');
 
-		u.getAll(function(data) {
-			$.each (data.users, function(k, user) {
-				var option = $('<option/>').attr('value', user.id)
-					.text(user.username+' ('+user.firstName+' '+user.lastName+', '+user.email+')');
+		var userList = new UserCollection();
+		userList.fetch().done(function() {
+			_.each(userList.models, function(user) {
+				var option = $('<option/>').attr('value', user.get('id'))
+					.text(user.get('username')+' ('+user.get('firstName')+' '+user.get('lastName')
+					+', '+user.get('email')+')');
+
+				var id = user.get('id');
+				if (c1.get(id) !== undefined) {
+					option.attr('selected', 'selected');
+				}
 
 				list.append(option);
 			});
-		})
-
+		});
 	});
-	$('#add-user-save').on('click', function(e) {
+	$('#group-add-user-save').on('click', function(e) {
 		e.preventDefault();
 
 		var userIds = new Array();
 		$.each($('#user-list option:selected'), function(k, user) {
 			userIds.push($(user).val());
 		});
-		var data = { ids: userIds, name: $('#groupName').val() };
-		g.saveUsers(data, function(data) {
-			$('#add-user-modal').modal('hide');
+
+		$.each(userIds, function(k, id) {
+			if (c1.get(id) == undefined) {
+
+				var user = new User({ id: id });
+				user.fetch().done(function() {
+					c1.create(user);
+				});
+			}
 		});
 	});
 
-	$('#add-permission-save').on('click', function(e) {
+	$('#group-add-permission-save').on('click', function(e) {
 		e.preventDefault();
 		// Get the items selected
 		var permIds = new Array();
@@ -246,18 +196,10 @@ $(function() {
 		e.preventDefault();
 		if (confirm('Are you sure you want to unlink this user?')) {
 			var userId = $(e.currentTarget).attr('id').split('-')[1];
-			$.ajax({
-				url: '/groups/users',
-				dataType: 'json',
-				type: 'DELETE',
-				data: {
-					groupName: $('#groupName').val(),
-					userId: userId
-				},
-				success: function(data) {
-					$('#user-row-'+userId).remove();
-				}
-			});
+
+			var item = c1.get(userId);
+			item.destroy({ groupId: 1 });
+			c1.remove(item);
 			return true;
 		} else {
 			return false;

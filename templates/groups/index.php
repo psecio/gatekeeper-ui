@@ -17,6 +17,13 @@
 } %}
 {% include 'partial/_table.php' with vars %}
 
+<table class="table table-striped">
+  <thead>
+  </thead>
+  <tbody id="groups-list">
+  </tbody>
+</table>
+
 <!-- Add User Modal -->
 <div class="modal fade" id="add-group-modal" tabindex="-1" role="dialog" aria-labelledby="addGroupModal" aria-hidden="true">
   <div class="modal-dialog">
@@ -50,6 +57,16 @@
     </div>
   </div>
 </div>
+
+<script id="group-table-rows" type="text/x-handlebars-template">
+{% raw %}
+{{#each groups}}
+<tr>
+  <td><a href="/groups/view/{{name}}">{{name}}</a></td>
+  </tr>
+{{/each}}
+{% endraw %}
+</script>
 
 
 {% endblock %}

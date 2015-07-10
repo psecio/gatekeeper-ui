@@ -74,6 +74,9 @@
 		model: User,
 		initialize: function(data) {
 			this.data = (typeof data == 'undefined') ? {} : data;
+
+			this.listenTo(this, 'reset add change remove', this.updateUrl, this);
+			this.listenTo(this, 'reset add change', this.updateUrl, this);
 		},
 		url: function() {
 			if (typeof this.data.groupId !== 'undefined') {
@@ -84,6 +87,19 @@
 				url = '/user';
 			}
 			return url;
+		},
+		updateUrl: function() {
+			var data = this.data;
+			this.each(function(perm) {
+				switch(data.type) {
+					case 'user':
+						var url = '/user/'+data.userId+'/user'; break;
+					case 'group':
+						var url = '/group/'+data.groupId+'/user'; break;
+					default: var url = '/permission'
+				}
+				perm.urlRoot = url;
+			});
 		}
 	});
 // });

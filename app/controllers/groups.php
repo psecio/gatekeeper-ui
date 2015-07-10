@@ -28,6 +28,17 @@ $app->group('/group', function() use ($app, $view) {
 		$users = g::findGroupById($groupId)->users;
 		$view->render('json.php', $users->toArray(true));
 	});
+	$app->delete('/:id/user/:userId', function($groupId, $userId) use ($app, $view) {
+		$group = g::findGroupById($groupId);
+		$group->removeUser($userId);
+	});
+	$app->put('/:id/user/:userId', function($groupId, $userId) use ($app, $view) {
+		$group = g::findGroupById($groupId);
+		if ($group->inGroup($userId) === false) {
+			$user = g::findUserById($userId);
+			$group->addUser($user);
+		}
+	});
 });
 
 // Pages

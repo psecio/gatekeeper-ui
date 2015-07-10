@@ -46,29 +46,6 @@
 			<th>Email</th>
 			<th>&nbsp;</th>
 		</thead>
-		<tbody>
-		{% for user in users %}
-		<tr id="user-row-{{ user.id }}">
-			<td><a href="/user/view/{{ user.username }}">{{ user.username }}</a></td>
-			<td>{{ user.firstName }} {{ user.lastName }}</td>
-			<td>{{ user.email }}</td>
-			<td>
-				<a href="#" class="delete-user" id="user-{{ user.id }}">
-					<img src="/img/x.jpeg" width="20" border="0">
-				</a>
-			</td>
-		</tr>
-		{% endfor %}
-		</tbody>
-	</table>
-	<br/>
-	<table class="table table-striped">
-		<thead>
-			<th>Username</th>
-			<th>Name</th>
-			<th>Email</th>
-			<th>&nbsp;</th>
-		</thead>
 		<tbody id="user-list"></tbody>
 	</table>
 </div>
@@ -89,7 +66,7 @@
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-				<button type="button" class="btn btn-primary" id="add-permission-save">Save changes</button>
+				<button type="button" class="btn btn-primary" id="group-add-permission-save">Save changes</button>
 			</div>
 		</div>
 	</div>
@@ -104,12 +81,12 @@
 				<h4 class="modal-title" id="myModalLabel">Select User(s)</h4>
 			</div>
 			<div class="modal-body">
-				<select name="user-list" class="form-control" id="user-list" multiple>
+				<select name="user-select-list" class="form-control" id="user-select-list" multiple>
 				</select>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-				<button type="button" class="btn btn-primary" id="add-user-save">Save changes</button>
+				<button type="button" class="btn btn-primary" id="group-add-user-save">Save changes</button>
 			</div>
 		</div>
 	</div>
@@ -135,7 +112,7 @@
 	<td><a href="/user/view/{{username}}">{{username}}</a></td>
 	<td>{{ firstName }} {{ lastName }}</td>
 	<td>{{email}}</td>
-	<td><a href="#" class="delete-permission" id="permission-{{id}}">
+	<td><a href="#" class="delete-user" id="user-{{id}}">
 		<img src="/img/x.jpeg" width="20" border="0"></a></td>
 	</tr>
 {{/each}}
