@@ -65,8 +65,8 @@ $app->group('/groups', function() use ($app, $view) {
 		$view->render('groups/index.php', $data);
 	});
 
-	$app->get('/view/:group', function($group) use ($app, $view) {
-		$group = g::findGroupByName($group);
+	$app->get('/view/:groupId', function($groupId) use ($app, $view) {
+		$group = g::findGroupById($groupId);
 		$data = array(
 			'group' => $group->toArray(),
 			'permissions' => $group->permissions->toArray(true),
@@ -75,18 +75,18 @@ $app->group('/groups', function() use ($app, $view) {
 		$view->render('groups/view.php', $data);
 	});
 
-	$app->get('/edit/:group', function($group) use ($app, $view) {
-		$group = g::findGroupByName($group);
+	$app->get('/edit/:groupId', function($groupId) use ($app, $view) {
+		$group = g::findGroupById($groupId);
 		$data = [
 			'group' => $group->toArray()
 		];
 		$view->render('groups/edit.php', $data);
 	});
-	$app->post('/edit/:group', function($group) use ($app, $view) {
+	$app->post('/edit/:groupId', function($groupId) use ($app, $view) {
 		$post = $app->request->post();
 		$data = ['success' => true];
 
-		$group = g::findGroupByName($group);
+		$group = g::findGroupById($groupId);
 		$group->name = $post['name'];
 		$group->description = $post['description'];
 
