@@ -119,6 +119,8 @@
 {% endraw %}
 </script>
 
+<input type="hidden" id="groupId" value="{{ group.id }}">
+
 {% endblock %}
 
 {% block scripts %}

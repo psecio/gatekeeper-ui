@@ -58,12 +58,12 @@
 {% raw %}
 {{#each groups}}
 <tr>
-  <td><a href="/groups/view/{{name}}">{{name}}</a></td>
+  <td><a href="/groups/view/{{id}}">{{name}}</a></td>
   <td>{{ description }}</td>
   <td>{{ created }}</td>
   <td>
-      <a href="/groups/edit/{{ name }}"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a>
-      <a href="/groups/delete/{{ name }}" class="group-delete" id="group-{{ id }}"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
+      <a href="/groups/edit/{{ id }}"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a>
+      <a href="/groups/delete/{{ id }}" class="group-delete" id="group-{{ id }}"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
     </td>
   </tr>
 {{/each}}

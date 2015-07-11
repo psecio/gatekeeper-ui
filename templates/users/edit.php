@@ -7,7 +7,7 @@
 <div class="alert alert-success">User saved successfully!</div>
 {% endif %}
 <br/>
-<form class="form form-horizontal" method="POST" action="/users/edit/{{ user.username }}">
+<form class="form form-horizontal" method="POST" action="/users/edit/{{ user.id }}">
 	<div class="form-group">
 		<label for="title" class="col-sm-2 control-label">Status:</label>
 		<div class="col-sm-5">

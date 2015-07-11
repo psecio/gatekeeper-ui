@@ -2,23 +2,22 @@
 
 {% block content %}
 
-<h3>Editing: {{ group.name }}</h3>
-
+<h3>Editing: {{ permission.name }}</h3>
 {% if success %}
-<div class="alert alert-success">Group saved successfully!</div>
+<div class="alert alert-success">Permission saved successfully!</div>
 {% endif %}
 <br/>
-<form class="form form-horizontal" method="POST" action="/groups/edit/{{ group.id }}">
+<form class="form form-horizontal" method="POST" action="/permissions/edit/{{ permission.id }}">
 	<div class="form-group">
 		<label for="title" class="col-sm-2 control-label">Name:</label>
 		<div class="col-sm-5">
-			<input type="text" class="form-control" id="name" name="name" value="{{ group.name }}">
+			<input type="text" class="form-control" id="name" name="name" value="{{ permission.name }}">
 		</div>
 	</div>
 	<div class="form-group">
 		<label for="title" class="col-sm-2 control-label">Description:</label>
 		<div class="col-sm-5">
-			<textarea class="form-control" name="description" id="description">{{ group.description }}</textarea>
+			<input type="text" class="form-control" id="description" name="description" value="{{ permission.description }}">
 		</div>
 	</div>
 	<div class="form-group">
@@ -28,5 +27,6 @@
 		</div>
 	</div>
 </form>
+
 
 {% endblock %}

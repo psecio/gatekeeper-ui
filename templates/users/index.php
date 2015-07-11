@@ -87,19 +87,19 @@
 <script id="user-table-rows" type="text/x-handlebars-template">
 {% raw %}
 {{#each users}}
-<tr id="user-{{ username }}">
+<tr id="user-{{ username }}" class="{{#if_eq status 'inactive'}}expired{{/if_eq}}">
   <td class="username">
-    <a href="/users/view/{{ username }}" class="name">{{ firstName }} {{ lastName }}</a><br/>
-    <a href="/users/view/{{ username }}">{{ username }}</a><br/>
+    <a href="/users/view/{{ id }}" class="name">{{ firstName }} {{ lastName }}</a><br/>
+    <a href="/users/view/{{ id }}">{{ username }}</a><br/>
     <span class="glyphicon glyphicon-envelope"></span>&nbsp;<a href="mailto:{{ email }}">{{ email }}</a>
   </td>
   <td class="status {{ status }}">{{ status }}</td>
   <td class="created">{{ created }}</td>
   <td>{{#if lastLogin }}{{ lastLogin }}{{else}}Never logged in.{{/if}}</td>
   <td>
-    <a href="/users/edit/{{ username }}"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a>
-    <a href="/users/status/{{ username }}" class="toggle-status"><span class="glyphicon glyphicon-off" aria-hidden="true"></span></a>
-    <a href="/users/delete/{{ username }}" class="user-delete"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
+    <a href="/users/edit/{{ id }}"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a>
+    <a href="/users/status/{{ id }}" class="toggle-status"><span class="glyphicon glyphicon-off" aria-hidden="true"></span></a>
+    <a href="/users/delete/{{ id }}" class="user-delete"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
   </td>
 </tr>
 {{/each}}
