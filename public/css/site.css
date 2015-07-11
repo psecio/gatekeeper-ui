@@ -23,3 +23,7 @@ table.user-table td.username a.name {
 	font-size: 18px;
 	font-weight: bold;
 }
+
+table tr.expired {
+	background-color: #F5DCDC;
+}
