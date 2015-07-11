@@ -43,10 +43,10 @@ $(function() {
 		}
 	});
 
-	var permissions = new PermissionCollection({ type: 'group', groupId: 1 });
+	var permissions = new PermissionCollection({ type: 'group', groupId: $('#groupId').val() });
 	var permissionView = new PermissionListView({ collection: permissions });
 
-	var c1 = new UserCollection({ type: 'group', groupId: 1 });
+	var c1 = new UserCollection({ type: 'group', groupId: $('#groupId').val() });
 	var ulv = new UserListView({ collection: c1 });
 
 
@@ -100,19 +100,20 @@ $(function() {
 		e.preventDefault();
 
 		var userIds = new Array();
-		$.each($('#user-list option:selected'), function(k, user) {
+		$.each($('#user-select-list option:selected'), function(k, user) {
 			userIds.push($(user).val());
 		});
 
 		$.each(userIds, function(k, id) {
 			if (c1.get(id) == undefined) {
-
 				var user = new User({ id: id });
 				user.fetch().done(function() {
 					c1.create(user);
 				});
 			}
 		});
+
+		$('#add-user-modal').modal('hide');
 	});
 
 	$('#group-add-permission-save').on('click', function(e) {
