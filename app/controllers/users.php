@@ -53,9 +53,9 @@ $app->group('/users', function() use ($app, $view) {
 		echo $view->render('users/add.php', $data);
 	});
 
-	$app->get('/view/:username', function($username) use ($app, $view) {
+	$app->get('/view/:userId', function($userId) use ($app, $view) {
 		try {
-			$user = g::findUserByUsername($username);
+			$user = g::findUserById($userId);
 			$data = array(
 				'user' => $user->toArray(),
 				'groups' => $user->groups->toArray(true),
@@ -66,15 +66,15 @@ $app->group('/users', function() use ($app, $view) {
 		} catch (\Exception $e) {
 			if (ACCEPT_JSON) { $app->response->setStatus(404); }
 			$data = array(
-				'message' => 'User "'.$username.'" not found!'
+				'message' => 'User not found!'
 			);
 			echo $view->render('error/index.php', $data);
 		}
 	});
 
-	$app->get('/edit/:username', function($username) use ($app, $view) {
+	$app->get('/edit/:userId', function($userId) use ($app, $view) {
 		try {
-			$user = g::findUserByUsername($username);
+			$user = g::findUserById($userId);
 			$data = array(
 				'user' => $user->toArray()
 			);
@@ -83,18 +83,18 @@ $app->group('/users', function() use ($app, $view) {
 		} catch (\Exception $e) {
 			if (ACCEPT_JSON) { $app->response->setStatus(404); }
 			$data = array(
-				'message' => 'User "'.$username.'" not found!'
+				'message' => 'User not found!'
 			);
 			echo $view->render('error/index.php', $data);
 		}
 	});
 
-	$app->post('/edit/:username', function($username) use ($app, $view) {
+	$app->post('/edit/:userId', function($userId) use ($app, $view) {
 		$post = $app->request->post();
 		$data = array('success' => true);
 
 		try {
-			$user = g::findUserByUsername($username);
+			$user = g::findUserById($userId);
 
 			$user->email = $post['email'];
 			$user->firstName = $post['first-name'];
@@ -117,10 +117,10 @@ $app->group('/users', function() use ($app, $view) {
 		}
 	});
 
-	$app->get('/delete/:username', function($username) use ($app, $view) {
+	$app->get('/delete/:userId', function($userId) use ($app, $view) {
 		$data = array();
 		try {
-			$user = g::findUserByUsername($username);
+			$user = g::findUserById($userId);
 			$ds = g::getDatasource();
 
 			if ($ds->delete($user) === false) {
@@ -137,12 +137,12 @@ $app->group('/users', function() use ($app, $view) {
 		}
 	});
 
-	$app->get('/status/:username', function($username) use ($app, $view) {
-		$user = g::findUserByUsername($username);
+	$app->get('/status/:userId', function($userId) use ($app, $view) {
+		$user = g::findUserById($userId);
 		($user->status === 'active') ? $user->deactivate() : $user->activate();
 		$result = array(
 			'status' => $user->status,
-			'username' => $username
+			'username' => $user->username
 		);
 
 		echo json_encode($result);
