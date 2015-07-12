@@ -72,7 +72,7 @@
 	</div>
 </div>
 
-<!-- Add Permission Modal -->
+<!-- Add User Modal -->
 <div class="modal fade" id="add-user-modal" tabindex="-1" role="dialog" aria-labelledby="addUserModal" aria-hidden="true">
 	<div class="modal-dialog">
 		<div class="modal-content">
