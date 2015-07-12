@@ -12,7 +12,6 @@ Handlebars.registerHelper('if_eq', function(a, b, opts) {
 		defaults: {
 			name: '',
 			description: '',
-			// id: 0,
 			created: '',
 			updated: ''
 		}
@@ -20,7 +19,6 @@ Handlebars.registerHelper('if_eq', function(a, b, opts) {
 	var Permission = Backbone.Model.extend({
 		urlRoot: '/permission',
 		defaults: {
-			id: 0,
 			name: '',
 			description: '',
 			created: '',
@@ -30,7 +28,6 @@ Handlebars.registerHelper('if_eq', function(a, b, opts) {
 	var User = Backbone.Model.extend({
 		urlRoot: '/user',
 		defaults: {
-			id: 0,
 			username: '',
 			email: '',
 			firstName: '',

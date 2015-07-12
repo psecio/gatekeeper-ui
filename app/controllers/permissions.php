@@ -7,17 +7,37 @@ $app->group('/permission', function() use ($app, $view) {
 		$permissions = g::findPermissions();
 		$perms = [];
 		foreach ($permissions as $permission) {
-			error_log(print_r($permission->isExpired(), true));
 			$perm = $permission->toArray();
 			$perm['expired'] = $permission->isExpired();
 			$perms[] = $perm;
 		}
 		$view->render('json.php', $perms);
 	});
-	$app->get('/:id', function($id) use ($app, $view) {
-		$perm = (is_numeric($id)) ? g::findPermissionById($id) : g::findPermissionByName($id);
-		$view->render('json.php', $perm->toArray());
+	$app->post('/', function() use ($app, $view) {
+		$post = json_decode($app->request->getBody(true));
+
+		$data = [
+			'result' => g::createPermission([
+				'name' => $post->name,
+				'description' => $post->description
+			])
+		];
+		$view->render('json.php', $data);
 	});
+	$app->group('/:id', function() use ($app, $view) {
+
+		$app->get('/', function($id) use ($app, $view) {
+			$perm = (is_numeric($id)) ? g::findPermissionById($id) : g::findPermissionByName($id);
+			$view->render('json.php', $perm->toArray());
+		});
+		$app->delete('/', function($id) use ($app, $view) {
+			$perm = (is_numeric($id)) ? g::findPermissionById($id) : g::findPermissionByName($id);
+			$ds = g::getDatasource();
+			$ds->delete($perm);
+			$view->render('json.php', $perm->toArray());
+		});
+	});
+
 	$app->get('/:id/group', function($id) use ($app, $view) {
 		$groups = g::findPermissionById($id)->groups;
 		$view->render('json.php', $groups->toArray(true));
