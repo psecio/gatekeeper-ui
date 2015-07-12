@@ -6,6 +6,12 @@
 {% if success %}
 <div class="alert alert-success">Permission saved successfully!</div>
 {% endif %}
+
+{% if date(permission.expire) < date() %}
+	<div class="alert alert-warning">This permission has expired!</div>
+{% elseif date(permission.expire) > date() %}
+	<div class="alert alert-info">This permission will expire at {{ permission.expire|date('Y.m.d H:i:s') }}</div>
+{% endif %}
 <br/>
 <form class="form form-horizontal" method="POST" action="/permissions/edit/{{ permission.id }}">
 	<div class="form-group">
