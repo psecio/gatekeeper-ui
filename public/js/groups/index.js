@@ -32,8 +32,6 @@ $(function() {
 			description: $('#group-description').val()
 		});
 		group.save().done(function() {
-			console.log('saving');
-
 			groups.add(group);
 			$('#add-group-modal').modal('hide');
 		});
