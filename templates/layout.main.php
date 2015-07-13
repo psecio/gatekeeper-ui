@@ -66,6 +66,7 @@
     <script src="/js/backbone-min.js"></script>
     <script src="/js/handlebars-v3.0.3.js"></script>
     <script src="/js/bootstrap.min.js"></script>
+    <script src="/js/moment.js"></script>
     <script src="/js/site.js"></script>
     <script src="/js/init.js"></script>
     <script src="/js/users.js"></script>

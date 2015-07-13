@@ -4,7 +4,14 @@ use \Psecio\Gatekeeper\Gatekeeper as g;
 $app->group('/group', function() use ($app, $view) {
 	$app->get('/', function() use ($app, $view) {
 		$groups = g::findGroups();
-		$view->render('json.php', $groups->toArray(true));
+		$groupList = [];
+		foreach ($groups as $group) {
+			$groupArr = $group->toArray();
+			$groupArr['expired'] = $group->isExpired();
+			$groupList[] = $groupArr;
+		}
+
+		$view->render('json.php', $groupList);
 	});
 	$app->post('/', function() use ($app, $view) {
 		$data = json_decode($app->request->getBody(true));

@@ -14,6 +14,7 @@
     <th>Name</th>
     <th>Description</th>
     <th>Created</th>
+    <th>Expired?</th>
     <th>&nbsp;</th>
   </thead>
   <tbody id="groups-list">
@@ -57,15 +58,16 @@
 <script id="group-table-rows" type="text/x-handlebars-template">
 {% raw %}
 {{#each groups}}
-<tr>
+<tr id="group-{{ id }}" class="{{#if expired}}expired{{/if}}">
   <td><a href="/groups/view/{{id}}">{{name}}</a></td>
   <td>{{ description }}</td>
   <td>{{ created }}</td>
+  <td>{{#if expired}}{{ date expire 'MMM Do YYYY h:mm:ss a' }}{{/if}}</td>
   <td>
       <a href="/groups/edit/{{ id }}"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a>
       <a href="/groups/delete/{{ id }}" class="group-delete" id="group-{{ id }}"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
-    </td>
-  </tr>
+  </td>
+</tr>
 {{/each}}
 {% endraw %}
 </script>

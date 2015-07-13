@@ -5,6 +5,9 @@ Handlebars.registerHelper('if_eq', function(a, b, opts) {
     else
         return opts.inverse(this);
 });
+Handlebars.registerHelper('date', function(value, format, opts) {
+    return moment.unix(value).format(format);
+});
 //----------
 
 	var Group = Backbone.Model.extend({
