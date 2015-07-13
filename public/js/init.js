@@ -62,7 +62,7 @@ Handlebars.registerHelper('date', function(value, format, opts) {
 				case 'user':
 					var url = '/user/'+data.userId+'/group'; break;
 				case 'permission':
-					var url = '/permission/'+data.groupId+'/group'; break;
+					var url = '/permission/'+data.permId+'/group'; break;
 				default: var url = '/group'
 			}
 			return url;
@@ -94,12 +94,12 @@ Handlebars.registerHelper('date', function(value, format, opts) {
 	var UserCollection = BaseCollection.extend({
 		model: User,
 		buildUrl: function(data) {
-			if (typeof data.groupId !== 'undefined') {
-				url = '/group/'+data.groupId+'/user';
-			} else if (typeof data.userId !== 'undefined') {
-				url = '/permission/'+data.userId+'/user';
-			} else {
-				url = '/user';
+			switch(data.type) {
+				case 'permission':
+					var url = '/permission/'+data.permId+'/user'; break;
+				case 'group':
+					var url = '/group/'+data.groupId+'/user'; break;
+				default: var url = '/user'
 			}
 			return url;
 		},

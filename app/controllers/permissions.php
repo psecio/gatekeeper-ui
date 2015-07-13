@@ -36,11 +36,30 @@ $app->group('/permission', function() use ($app, $view) {
 			$ds->delete($perm);
 			$view->render('json.php', $perm->toArray());
 		});
-	});
-
-	$app->get('/:id/group', function($id) use ($app, $view) {
-		$groups = g::findPermissionById($id)->groups;
-		$view->render('json.php', $groups->toArray(true));
+		$app->get('/group', function($id) use ($app, $view) {
+			$groups = g::findPermissionById($id)->groups;
+			$view->render('json.php', $groups->toArray(true));
+		});
+		$app->get('/user', function($id) use ($app, $view) {
+			$users = g::findPermissionById($id)->users;
+			$view->render('json.php', $users->toArray(true));
+		});
+		$app->delete('/user/:userId', function($permId, $userId) use ($app, $view) {
+			$user = g::findUserById($userId);
+			$user->revokePermission($permId);
+		});
+		$app->delete('/group/:groupId', function($permId, $groupId) use ($app, $view) {
+			$group = g::findGroupById($groupId);
+			$group->removePermission($permId);
+		});
+		$app->put('/group/:groupId', function($permId, $groupId) use ($app, $view) {
+			$group = g::findGroupById($groupId);
+			$group->addPermission($permId);
+		});
+		$app->put('/user/:userId', function($permId, $userId) use ($app, $view) {
+			$user = g::findUserById($userId);
+			$user->addPermission($permId);
+		});
 	});
 });
 
