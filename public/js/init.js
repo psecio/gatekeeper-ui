@@ -41,6 +41,14 @@ Handlebars.registerHelper('date', function(value, format, opts) {
 			lastLogin: ''
 		}
 	});
+	var Policy = Backbone.Model.extend({
+		urlRoot: '/policy',
+		defaults: {
+			name: '',
+			expression: '',
+			created: ''
+		}
+	});
 
 	var BaseCollection = Backbone.Collection.extend({
 		initialize: function(data) {
@@ -106,6 +114,24 @@ Handlebars.registerHelper('date', function(value, format, opts) {
 		updateUrl: function() {
 			this.each(function(user) {
 				user.urlRoot = this.buildUrl(this.data);
+			}, this);
+		}
+	});
+	var PolicyCollection = BaseCollection.extend({
+		model: Policy,
+		buildUrl: function(data) {
+			switch(data.type) {
+				case 'permission':
+					var url = '/permission/'+data.permId+'/policy'; break;
+				case 'group':
+					var url = '/group/'+data.groupId+'/policy'; break;
+				default: var url = '/policy'
+			}
+			return url;
+		},
+		updateUrl: function() {
+			this.each(function(policy) {
+				policy.urlRoot = this.buildUrl(this.data);
 			}, this);
 		}
 	});
